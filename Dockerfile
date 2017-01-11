@@ -7,13 +7,17 @@ ENV PID_PATH /data/run/nginx.pid
 ENV LOCK_PATH /data/run/nginx.lock
 ENV USER www-data
 ENV GROUP www-data
-
 RUN groupadd -r ${GROUP} && useradd -r -g ${GROUP} ${USER}
 
 RUN yum update --skip-broken && yum install -y ca-certificates curl gcc make tar \
-  && yum install -y pcre-devel zlib-devel \
-  && cd /usr/src && curl -Ls http://nginx.org/download/nginx-1.11.8.tar.gz -o nginx-1.11.8.tar.gz \
-  && tar -xzvf nginx-1.11.8.tar.gz && cd nginx-1.11.8 \
+  && cd /usr/src \
+  && curl -Ls http://www.zlib.net/zlib-1.2.10.tar.gz -o zlib-1.2.10.tar.gz \
+  && tar -xzvf zlib-1.2.10.tar.gz \
+  && curl -Ls ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.39.tar.gz -o pcre-8.39.tar.gz \
+  && tar -xzvf pcre-8.39.tar.gz \
+  && curl -Ls http://nginx.org/download/nginx-1.11.8.tar.gz -o nginx-1.11.8.tar.gz \
+  && tar -xzvf nginx-1.11.8.tar.gz
+  && cd nginx-1.11.8 \
   && ./configure --user=www-data --group=www-data \
       --prefix=${INSTALL_PATH} \
       --http-log-path=${LOG_PATH} \
@@ -32,7 +36,10 @@ RUN yum update --skip-broken && yum install -y ca-certificates curl gcc make tar
       --with-http_dav_module \
       --with-http_gzip_static_module  \
       --with-pcre-jit \
-   && make install ＼
+      --with-pcre=/usr/src/pcre-8.39 \
+      --with-zlib=/usr/src/zlib-1.2.10 \
+   && make install \
+   && yum remove -y gcc make tar
    && yum clean all 
 
 ENV PATH $PATH:/opt/nginx/sbin/
