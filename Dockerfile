@@ -43,7 +43,7 @@ RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates cur
       --with-zlib=/usr/src/zlib-1.2.10 \
       --with-openssl=/usr/src/openssl-1.1.0c \
    && make install && make clean \
-   && rm /usr/src/*.tar.gz \
+   && rm -rf /usr/src/pcre* /user/src/openssl* /usr/src/zlib* \
    && yum remove -y gcc gcc-c++ make perl \
    && yum clean all 
 
