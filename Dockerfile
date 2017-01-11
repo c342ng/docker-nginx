@@ -9,7 +9,7 @@ ENV USER www-data
 ENV GROUP www-data
 RUN groupadd -r ${GROUP} && useradd -r -g ${GROUP} ${USER}
 
-RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates curl gcc gcc-c++ make tar pcre-devel zlib-devel openssl-devel \
+RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates curl gcc make tar pcre-devel zlib-devel openssl-devel \
   && cd /usr/src \
   #&& curl -Ls http://www.zlib.net/zlib-1.2.10.tar.gz -o zlib-1.2.10.tar.gz \
   #&& tar -xzvf zlib-1.2.10.tar.gz \
@@ -38,7 +38,7 @@ RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates cur
       --with-http_dav_module \
       --with-http_gzip_static_module  \
       --with-pcre-jit \
-      --with-cc=/usr/bin/gcc \
+      #--with-cc=/usr/bin/gcc \
       #--with-pcre=/usr/src/pcre-8.39 \
       #--with-zlib=/usr/src/zlib-1.2.10 \
       #--with-openssl=/usr/src/openssl-1.1.0c \
