@@ -23,6 +23,7 @@ RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates cur
   && cd nginx-1.11.8 \
   && ./configure --user=www-data --group=www-data \
       --prefix=${INSTALL_PATH} \
+      --pid-path=${PID_PATH} \
       --http-log-path=${LOG_PATH}/access.log \
       --error-log-path=${LOG_PATH}/error.log \
       --http-client-body-temp-path="${DATA_PATH}/client-body-temp" \
@@ -42,19 +43,18 @@ RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates cur
       --with-pcre=/usr/src/pcre-8.39 \
       --with-zlib=/usr/src/zlib-1.2.10 \
       --with-openssl=/usr/src/openssl-1.1.0c \
-   && make install 
-#    && make clean \
-#    && rm -rf /usr/src/pcre* /user/src/openssl* /usr/src/zlib* \
-#    && yum remove -y gcc gcc-c++ make perl \
-#    && yum clean all 
+   && make install && make clean \
+   && rm -rf /usr/src/pcre* /user/src/openssl* /usr/src/zlib* \
+   && yum remove -y gcc gcc-c++ make perl \
+   && yum clean all 
 
 ENV PATH $PATH:/opt/nginx/sbin/
 
-# # forward request and error logs to docker log collector
-# RUN touch ${LOG_PATH}/access.log && touch ${LOG_PATH}/error.log \
-#   && ln -sf /dev/stdout /data/logs/nginx/access.log \
-#   && ln -sf /dev/stderr /data/logs/nginx/error.log
+# forward request and error logs to docker log collector
+RUN touch ${LOG_PATH}/access.log && touch ${LOG_PATH}/error.log \
+  && ln -sf /dev/stdout /data/logs/nginx/access.log \
+  && ln -sf /dev/stderr /data/logs/nginx/error.log
 
-# EXPOSE 80 443
+EXPOSE 80 443
 
-# CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
