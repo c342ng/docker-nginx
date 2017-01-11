@@ -9,7 +9,7 @@ ENV USER www-data
 ENV GROUP www-data
 RUN groupadd -r ${GROUP} && useradd -r -g ${GROUP} ${USER}
 
-RUN yum update --skip-broken && yum install -y ca-certificates curl gcc make tar \
+RUN yum update --skip-broken && yum install -y ca-certificates curl gcc gcc-c++ make tar \
   && cd /usr/src \
   && curl -Ls http://www.zlib.net/zlib-1.2.10.tar.gz -o zlib-1.2.10.tar.gz \
   && tar -xzvf zlib-1.2.10.tar.gz \
@@ -43,7 +43,7 @@ RUN yum update --skip-broken && yum install -y ca-certificates curl gcc make tar
       --with-openssl=/user/src/openssl-1.1.0c \
    && make install \
    && rm /usr/src/*.tar.gz \
-   && yum remove -y gcc make tar \
+   && yum remove -y gcc gcc-c++ make tar \
    && yum clean all 
 
 ENV PATH $PATH:/opt/nginx/sbin/
