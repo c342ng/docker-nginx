@@ -24,7 +24,7 @@ RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates cur
   && ./configure --user=www-data --group=www-data \
       --prefix=${INSTALL_PATH} \
       --http-log-path=${LOG_PATH} \
-      --error-log-path=${LOG_PATH} \
+      --error-log-path=${LOG_PATH}/error.log \
       --http-client-body-temp-path="${DATA_PATH}/client-body-temp" \
       --http-proxy-temp-path="${DATA_PATH}/proxy-temp" \
       --http-fastcgi-temp-path="${DATA_PATH}/proxy-temp" \
