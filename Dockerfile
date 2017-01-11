@@ -8,7 +8,7 @@ ENV LOCK_PATH /data/run/nginx.lock
 ENV USER www-data
 ENV GROUP www-data
 RUN groupadd -r ${GROUP} && useradd -r -g ${GROUP} ${USER}
-RUN make -p ${INSTALL_PATH} ${DATA_PATH} ${LOG_PATH} && chown "${GROUP}:${USER}" ${INSTALL_PATH} ${DATA_PATH} ${LOG_PATH}
+RUN mkdir -p ${INSTALL_PATH} ${DATA_PATH} ${LOG_PATH} && chown "${GROUP}:${USER}" ${INSTALL_PATH} ${DATA_PATH} ${LOG_PATH}
 
 RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates curl tar gcc gcc-c++ make perl \
   && cd /usr/src \
