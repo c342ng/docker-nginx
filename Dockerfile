@@ -16,7 +16,7 @@ RUN yum update --skip-broken && yum install -y ca-certificates curl gcc make tar
   && curl -Ls ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.39.tar.gz -o pcre-8.39.tar.gz \
   && tar -xzvf pcre-8.39.tar.gz \
   && curl -Ls http://nginx.org/download/nginx-1.11.8.tar.gz -o nginx-1.11.8.tar.gz \
-  && tar -xzvf nginx-1.11.8.tar.gz
+  && tar -xzvf nginx-1.11.8.tar.gz \
   && cd nginx-1.11.8 \
   && ./configure --user=www-data --group=www-data \
       --prefix=${INSTALL_PATH} \
@@ -39,7 +39,7 @@ RUN yum update --skip-broken && yum install -y ca-certificates curl gcc make tar
       --with-pcre=/usr/src/pcre-8.39 \
       --with-zlib=/usr/src/zlib-1.2.10 \
    && make install \
-   && yum remove -y gcc make tar
+   && yum remove -y gcc make tar \
    && yum clean all 
 
 ENV PATH $PATH:/opt/nginx/sbin/
