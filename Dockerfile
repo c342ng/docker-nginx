@@ -15,6 +15,8 @@ RUN yum update --skip-broken && yum install -y ca-certificates curl gcc make tar
   && tar -xzvf zlib-1.2.10.tar.gz \
   && curl -Ls ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.39.tar.gz -o pcre-8.39.tar.gz \
   && tar -xzvf pcre-8.39.tar.gz \
+  && curl -Ls https://www.openssl.org/source/openssl-1.1.0c.tar.gz -o openssl-1.1.0c.tar.gz \
+  && tar -xzvf openssl-1.1.0c.tar.gz \
   && curl -Ls http://nginx.org/download/nginx-1.11.8.tar.gz -o nginx-1.11.8.tar.gz \
   && tar -xzvf nginx-1.11.8.tar.gz \
   && cd nginx-1.11.8 \
@@ -38,7 +40,9 @@ RUN yum update --skip-broken && yum install -y ca-certificates curl gcc make tar
       --with-pcre-jit \
       --with-pcre=/usr/src/pcre-8.39 \
       --with-zlib=/usr/src/zlib-1.2.10 \
+      --with-openssl=/user/src/openssl-1.1.0c \
    && make install \
+   && rm /usr/src/*.tar.gz \
    && yum remove -y gcc make tar \
    && yum clean all 
 
