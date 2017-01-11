@@ -8,6 +8,8 @@ ENV LOCK_PATH /data/run/nginx.lock
 ENV USER www-data
 ENV GROUP www-data
 
+RUN groupadd -r ${GROUP} && useradd -r -g ${GROUP} ${USER}
+
 RUN yum update --skip-broken && yum install -y ca-certificates curl gcc make tar \
   && yum install -y pcre-devel zlib-devel \
   && cd /usr/src && curl -Ls http://nginx.org/download/nginx-1.11.8.tar.gz -o nginx-1.11.8.tar.gz \
@@ -22,6 +24,23 @@ RUN yum update --skip-broken && yum install -y ca-certificates curl gcc make tar
       --http-uwsgi-temp-path="${DATA_PATH}/uwsgi-temp" \
       --http-scgi-temp-path="${DATA_PATH}/scgi-temp" \
       --http-fastcgi-temp-path="${DATA_PATH}/proxy-temp" \
+      --with-http_v2_module \
+      --with-http_ssl_module \
+      --with-http_stub_status_module \
+      --with-http_realip_module \
+      --with-http_addition_module \
+      --with-http_dav_module \
+      --with-http_gzip_static_module  \
+      --with-pcre-jit \
    && make install ＼
    && yum clean all 
-      
+
+ENV PATH $PATH:/opt/nginx/sbin/
+
+# forward request and error logs to docker log collector
+RUN ln -sf /dev/stdout /data/logs/nginx/access.log \
+	&& ln -sf /dev/stderr /data/logs/nginx/error.log
+
+EXPOSE 80 443
+
+CMD ["/opt/nginx/sbin/nginx", "-g", "daemon off;"]
