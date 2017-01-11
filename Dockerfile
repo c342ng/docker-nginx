@@ -22,5 +22,6 @@ RUN yum update --skip-broken && yum install -y ca-certificates curl gcc make tar
       --http-uwsgi-temp-path="${DATA_PATH}/uwsgi-temp" \
       --http-scgi-temp-path="${DATA_PATH}/scgi-temp" \
       --http-fastcgi-temp-path="${DATA_PATH}/proxy-temp" \
-   && make install
+   && make install ＼
+   && yum clean all 
       
