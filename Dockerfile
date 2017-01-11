@@ -40,7 +40,7 @@ RUN yum update --skip-broken && yum install -y ca-certificates curl gcc gcc-c++ 
       --with-pcre-jit \
       --with-pcre=/usr/src/pcre-8.39 \
       --with-zlib=/usr/src/zlib-1.2.10 \
-      --with-openssl=/user/src/openssl-1.1.0c \
+      --with-openssl=/usr/src/openssl-1.1.0c \
    && make install \
    && rm /usr/src/*.tar.gz \
    && yum remove -y gcc gcc-c++ make tar \
