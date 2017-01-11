@@ -8,8 +8,9 @@ ENV LOCK_PATH /data/run/nginx.lock
 ENV USER www-data
 ENV GROUP www-data
 RUN groupadd -r ${GROUP} && useradd -r -g ${GROUP} ${USER}
+RUN make -p ${INSTALL_PATH} ${DATA_PATH} ${LOG_PATH} && chown "${GROUP}:${USER}" ${INSTALL_PATH} ${DATA_PATH} ${LOG_PATH}
 
-RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates curl gcc gcc-c++ make tar perl \
+RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates curl tar gcc gcc-c++ make perl \
   && cd /usr/src \
   && curl -Ls http://www.zlib.net/zlib-1.2.10.tar.gz -o zlib-1.2.10.tar.gz \
   && tar -xzvf zlib-1.2.10.tar.gz \
@@ -43,14 +44,15 @@ RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates cur
       --with-openssl=/usr/src/openssl-1.1.0c \
    && make install && make clean \
    && rm /usr/src/*.tar.gz \
-   && yum remove -y gcc gcc-c++ make tar pcre-devel zlib-devel openssl-devel \
+   && yum remove -y gcc gcc-c++ make perl \
    && yum clean all 
 
 ENV PATH $PATH:/opt/nginx/sbin/
 
 # forward request and error logs to docker log collector
-RUN ln -sf /dev/stdout /data/logs/nginx/access.log \
-	&& ln -sf /dev/stderr /data/logs/nginx/error.log
+RUN touch ${LOG_PATH}/access.log && touch ${LOG_PATH}/error.log \
+  && ln -sf /dev/stdout /data/logs/nginx/access.log \
+  && ln -sf /dev/stderr /data/logs/nginx/error.log
 
 EXPOSE 80 443
 
