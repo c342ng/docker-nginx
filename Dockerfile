@@ -23,7 +23,7 @@ RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates cur
   && cd nginx-1.11.8 \
   && ./configure --user=www-data --group=www-data \
       --prefix=${INSTALL_PATH} \
-      --http-log-path=${LOG_PATH} \
+      --http-log-path=${LOG_PATH}/access.log \
       --error-log-path=${LOG_PATH}/error.log \
       --http-client-body-temp-path="${DATA_PATH}/client-body-temp" \
       --http-proxy-temp-path="${DATA_PATH}/proxy-temp" \
