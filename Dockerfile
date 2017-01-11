@@ -56,4 +56,4 @@ RUN touch ${LOG_PATH}/access.log && touch ${LOG_PATH}/error.log \
 
 EXPOSE 80 443
 
-CMD ["/opt/nginx/sbin/nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
