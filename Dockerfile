@@ -49,11 +49,11 @@ RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates cur
 
 ENV PATH $PATH:/opt/nginx/sbin/
 
-# forward request and error logs to docker log collector
-RUN touch ${LOG_PATH}/access.log && touch ${LOG_PATH}/error.log \
-  && ln -sf /dev/stdout /data/logs/nginx/access.log \
-  && ln -sf /dev/stderr /data/logs/nginx/error.log
+# # forward request and error logs to docker log collector
+# RUN touch ${LOG_PATH}/access.log && touch ${LOG_PATH}/error.log \
+#   && ln -sf /dev/stdout /data/logs/nginx/access.log \
+#   && ln -sf /dev/stderr /data/logs/nginx/error.log
 
-EXPOSE 80 443
+# EXPOSE 80 443
 
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"]
