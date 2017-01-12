@@ -10,16 +10,17 @@ ENV GROUP www-data
 RUN groupadd -r ${GROUP} && useradd -r -g ${GROUP} ${USER}
 RUN mkdir -p ${INSTALL_PATH} ${DATA_PATH} ${LOG_PATH} && chown "${GROUP}:${USER}" ${INSTALL_PATH} ${DATA_PATH} ${LOG_PATH}
 
-RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates curl tar gcc gcc-c++ make perl \
+RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates curl tar gcc make \
+  && yum install -y oppenssl-devel perl-devel zlib-devel
   && cd /usr/src \
-  && curl -Ls http://www.zlib.net/zlib-1.2.10.tar.gz -o zlib-1.2.10.tar.gz \
-  && tar -xzvf zlib-1.2.10.tar.gz \
-  && curl -Ls ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.39.tar.gz -o pcre-8.39.tar.gz \
-  && tar -xzvf pcre-8.39.tar.gz \
-  && curl -Ls https://www.openssl.org/source/openssl-1.1.0c.tar.gz -o openssl-1.1.0c.tar.gz \
-  && tar -xzvf openssl-1.1.0c.tar.gz \
+#   && curl -Ls http://www.zlib.net/zlib-1.2.10.tar.gz -o zlib-1.2.10.tar.gz \
+#   && tar -xzvfq zlib-1.2.10.tar.gz \
+#   && curl -Ls ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.39.tar.gz -o pcre-8.39.tar.gz \
+#   && tar -xzvfq pcre-8.39.tar.gz \
+#   && curl -Ls https://www.openssl.org/source/openssl-1.1.0c.tar.gz -o openssl-1.1.0c.tar.gz \
+#   && tar -xzvfq openssl-1.1.0c.tar.gz \
   && curl -Ls http://nginx.org/download/nginx-1.11.8.tar.gz -o nginx-1.11.8.tar.gz \
-  && tar -xzvf nginx-1.11.8.tar.gz \
+  && tar -xzvfq nginx-1.11.8.tar.gz \
   && cd nginx-1.11.8 \
 RUN ./configure --user=www-data --group=www-data \
       --prefix=${INSTALL_PATH} \
