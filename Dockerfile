@@ -43,6 +43,34 @@ RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates cur
       --with-pcre=/usr/src/pcre-8.39 \
       --with-zlib=/usr/src/zlib-1.2.10 \
       --with-openssl=/usr/src/openssl-1.1.0c \
+      --with-mysql=mysqlnd —with-mysqli=mysqlnd —with-pdo-mysql=mysqlnd \
+      --with-iconv-dir \
+      --with-jpeg-dir \
+      --with-png-dir \
+      --with-libxml-dir \
+      --enable-xml \
+      --disable-rpath \
+      --enable-bcmath \
+      --enable-shmop \
+      --enable-sysvsem \
+      --enable-inline-optimization \
+      --with-curl \
+      --with-mcrypt \
+      --enable-mbregex \
+      --enable-fpm \
+      --enable-mbstring \
+      --with-gd \
+      --enable-gd-native-ttf \
+      --with-openssl \
+      --with-mhash \
+      --enable-pcntl \
+      --enable-sockets \
+      --with-xmlrpc \
+      --enable-zip \
+      --enable-mbstring \
+      --enable-soap \
+      --enable-embed \
+      --without-pear \
    && make install && make clean \
    && rm -rf /usr/src/pcre* /user/src/openssl* /usr/src/zlib* \
    && yum remove -y gcc gcc-c++ make perl \
