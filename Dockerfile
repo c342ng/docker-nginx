@@ -10,8 +10,7 @@ ENV GROUP www-data
 RUN groupadd -r ${GROUP} && useradd -r -g ${GROUP} ${USER}
 RUN mkdir -p ${INSTALL_PATH} ${DATA_PATH} ${LOG_PATH} && chown "${GROUP}:${USER}" ${INSTALL_PATH} ${DATA_PATH} ${LOG_PATH}
 
-RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates curl tar gcc make \
-  && yum install --skip-broken -y oppenssl-devel perl-devel zlib-devel \
+RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates curl tar gcc make perl\
   && cd /usr/src \
   && curl -Ls http://www.zlib.net/zlib-1.2.10.tar.gz -o zlib-1.2.10.tar.gz \
   && tar -xzvf zlib-1.2.10.tar.gz \
@@ -45,33 +44,6 @@ RUN cd /usr/src/nginx-1.11.8 && ./configure --user=www-data --group=www-data \
       --with-pcre=/usr/src/pcre-8.39 \
       --with-zlib=/usr/src/zlib-1.2.10 \
       --with-openssl=/usr/src/openssl-1.1.0c \
-      --with-iconv-dir \
-      --with-jpeg-dir \
-      --with-png-dir \
-      --with-libxml-dir \
-      --enable-xml \
-      --disable-rpath \
-      --enable-bcmath \
-      --enable-shmop \
-      --enable-sysvsem \
-      --enable-inline-optimization \
-      --with-curl \
-      --with-mcrypt \
-      --enable-mbregex \
-      --enable-fpm \
-      --enable-mbstring \
-      --with-gd \
-      --enable-gd-native-ttf \
-      --with-openssl \
-      --with-mhash \
-      --enable-pcntl \
-      --enable-sockets \
-      --with-xmlrpc \
-      --enable-zip \
-      --enable-mbstring \
-      --enable-soap \
-      --enable-embed \
-      --without-pear \
    && make install && make clean \
    && rm -rf /usr/src/pcre* /user/src/openssl* /usr/src/zlib* \
    && yum remove -y gcc gcc-c++ make perl \
