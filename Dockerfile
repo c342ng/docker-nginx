@@ -21,7 +21,7 @@ RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates cur
   && curl -Ls http://nginx.org/download/nginx-1.11.8.tar.gz -o nginx-1.11.8.tar.gz \
   && tar -xzvf nginx-1.11.8.tar.gz \
   && cd nginx-1.11.8 \
-  && ./configure --user=www-data --group=www-data \
+RUN ./configure --user=www-data --group=www-data \
       --prefix=${INSTALL_PATH} \
       --pid-path=${PID_PATH} \
       --http-log-path=${LOG_PATH}/access.log \
