@@ -22,7 +22,7 @@ RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates cur
   && curl -Ls http://nginx.org/download/nginx-1.11.8.tar.gz -o nginx-1.11.8.tar.gz \
   && tar -xzvf nginx-1.11.8.tar.gz \
   && cd nginx-1.11.8 
-RUN cd /usr/src/nginx-1.11.8 && ./configure --help 
+# RUN cd /usr/src/nginx-1.11.8 && ./configure --help 
 RUN cd /usr/src/nginx-1.11.8 && ./configure --user=www-data --group=www-data \
       --prefix=${INSTALL_PATH} \
       --pid-path=${PID_PATH} \
@@ -42,6 +42,9 @@ RUN cd /usr/src/nginx-1.11.8 && ./configure --user=www-data --group=www-data \
       --with-http_dav_module \
       --with-http_gzip_static_module  \
       --with-pcre-jit \
+      --with-pcre \
+      --with-zlib \
+      --with-openssl \
 #       --with-pcre=/usr/src/pcre-8.39 \
 #       --with-zlib=/usr/src/zlib-1.2.10 \
 #       --with-openssl=/usr/src/openssl-1.1.0c \
