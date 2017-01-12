@@ -51,6 +51,8 @@ RUN cd /usr/src/nginx-1.11.8 && ./configure --user=www-data --group=www-data \
 
 ENV PATH $PATH:/opt/nginx/sbin/
 
+RUN ln -sf /etc/nginx/ ${INSTALL_PATH}/conf/
+
 # forward request and error logs to docker log collector
 RUN touch ${LOG_PATH}/access.log && touch ${LOG_PATH}/error.log \
   && ln -sf /dev/stdout /data/logs/nginx/access.log \
