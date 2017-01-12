@@ -43,7 +43,6 @@ RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates cur
       --with-pcre=/usr/src/pcre-8.39 \
       --with-zlib=/usr/src/zlib-1.2.10 \
       --with-openssl=/usr/src/openssl-1.1.0c \
-      --with-mysql=mysqlnd —with-mysqli=mysqlnd —with-pdo-mysql=mysqlnd \
       --with-iconv-dir \
       --with-jpeg-dir \
       --with-png-dir \
