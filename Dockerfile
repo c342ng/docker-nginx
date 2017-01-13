@@ -24,7 +24,7 @@ RUN rpm --rebuilddb && yum swap -y fakesystemd systemd && yum update -y && yum i
 #   && curl -Ls https://www.openssl.org/source/openssl-1.1.0c.tar.gz -o openssl-1.1.0c.tar.gz \
 #   && tar -xzvf openssl-1.1.0c.tar.gz \
   && curl -Ls http://nginx.org/download/nginx-1.11.8.tar.gz -o nginx-1.11.8.tar.gz \
-  && tar -xzvf nginx-1.11.8.tar.gz
+  && tar -xzvf nginx-1.11.8.tar.gz \
   && cd /usr/src/nginx-1.11.8 \
     && rpm --rebuilddb && yum install -y openssl-devel pcre-devel libxml2-devel libxslt-devel geoip-devel \
     && ./configure \
