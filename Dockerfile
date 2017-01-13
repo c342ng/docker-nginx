@@ -26,6 +26,7 @@ RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates cur
   && tar -xzvf nginx-1.11.8.tar.gz
 
 RUN cd /usr/src/nginx-1.11.8 \
+    && rpm --rebuilddb && yum install --skip-broken -y openssl-devel pcre-devel libxml2-devel \
     && ./configure \
         --prefix=${OPT_PATH} \
         --sbin-path=${OPT_PATH}/sbin/nginx \
@@ -71,9 +72,9 @@ RUN cd /usr/src/nginx-1.11.8 \
         --with-http_geoip_module \
         --with-http_xslt_module \
         --with-pcre-jit \
-        --with-pcre=/usr/src/pcre-8.39 \
-        --with-zlib=/usr/src/zlib-1.2.10 \
-        --with-openssl=/usr/src/openssl-1.1.0c \
+#         --with-pcre=/usr/src/pcre-8.39 \
+#         --with-zlib=/usr/src/zlib-1.2.10 \
+#         --with-openssl=/usr/src/openssl-1.1.0c \
    && make install && make clean \
    && rm -rf /usr/src/pcre* /user/src/openssl* /usr/src/zlib* \
    && yum remove -y perl gcc gcc-c++ make \
