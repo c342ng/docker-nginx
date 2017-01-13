@@ -26,7 +26,9 @@ RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates cur
   && tar -xzvf nginx-1.11.8.tar.gz
 
 RUN cd /usr/src/nginx-1.11.8 \
-    && rpm --rebuilddb && yum install --skip-broken -y openssl-devel pcre pcre-devel libxml2-devel \
+#     && rpm --rebuilddb \
+#     && yum swap -y fakesystemd systemd &&  yum install -y systemd-devel \
+    && yum install -y openssl-devel pcre-devel libxml2-devel \
     && ./configure \
         --prefix=${OPT_PATH} \
         --sbin-path=${OPT_PATH}/sbin/nginx \
