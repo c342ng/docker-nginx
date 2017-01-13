@@ -27,7 +27,7 @@ RUN yum update --skip-broken && yum install --skip-broken -y ca-certificates cur
 
 RUN cd /usr/src/nginx-1.11.8 \
 #     && rpm --rebuilddb \
-#     && yum swap -y fakesystemd systemd &&  yum install -y systemd-devel \
+    && yum swap -y fakesystemd systemd &&  yum install -y systemd-devel \
     && yum install -y openssl-devel pcre-devel libxml2-devel \
     && ./configure \
         --prefix=${OPT_PATH} \
