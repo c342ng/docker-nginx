@@ -38,8 +38,8 @@ RUN curl -Ls ftp://xmlsoft.org/libxml2/libxml2-${LIBXML2_VERSION}.tar.gz -o libx
     && curl -Ls ftp://xmlsoft.org/libxslt/libxslt-${LIBXSLT_VERSION}.tar.gz -o libxslt-${LIBXSLT_VERSION}.tar.gz \
     && tar -xzvf libxslt-${LIBXSLT_VERSION}.tar.gz
     
-RUN cd /usr/src/nginx-${NGINX_VERSION} \
-    && ./configure --help
+# RUN cd /usr/src/nginx-${NGINX_VERSION} \
+#     && ./configure --help
     
 #    && rpm --rebuilddb && yum install -y openssl-devel pcre-devel libxml2-devel libxslt-devel geoip-devel \
 RUN cd /usr/src/nginx-${NGINX_VERSION} \
@@ -91,8 +91,8 @@ RUN cd /usr/src/nginx-${NGINX_VERSION} \
         --with-pcre=/usr/src/pcre-${PCRE_VERSION} \
         --with-zlib=/usr/src/zlib-${ZLIB_VERSION} \
         --with-openssl=/usr/src/openssl-${OPENSSL_VERSION} \
-        --with-libxml=/usr/src/libxml2-${LIBXML2_VERSION} \
-        --with-libxslt=/usr/src/libxslt-${LIBXSLT_VERSION} \
+#         --with-libxml=/usr/src/libxml2-${LIBXML2_VERSION} \
+#         --with-libxslt=/usr/src/libxslt-${LIBXSLT_VERSION} \
    && make install && make clean \
    && rm -rf /usr/src/pcre* /user/src/openssl* /usr/src/zlib* \
    && yum remove -y perl gcc gcc-c++ make \
