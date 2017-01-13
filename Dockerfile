@@ -17,16 +17,15 @@ RUN mkdir -p ${OPT_PATH} ${CONF_PATH} ${DATA_PATH} ${LOG_PATH} \
 RUN rpm --rebuilddb && yum swap -y fakesystemd systemd && yum update -y && yum install -y systemd-devel \
   && yum install -y ca-certificates curl tar perl gcc gcc-c++ make \
   && cd /usr/src \
-  && curl -Ls http://www.zlib.net/zlib-1.2.10.tar.gz -o zlib-1.2.10.tar.gz \
-  && tar -xzvf zlib-1.2.10.tar.gz \
-  && curl -Ls ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.39.tar.gz -o pcre-8.39.tar.gz \
-  && tar -xzvf pcre-8.39.tar.gz \
-  && curl -Ls https://www.openssl.org/source/openssl-1.1.0c.tar.gz -o openssl-1.1.0c.tar.gz \
-  && tar -xzvf openssl-1.1.0c.tar.gz \
+#   && curl -Ls http://www.zlib.net/zlib-1.2.10.tar.gz -o zlib-1.2.10.tar.gz \
+#   && tar -xzvf zlib-1.2.10.tar.gz \
+#   && curl -Ls ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.39.tar.gz -o pcre-8.39.tar.gz \
+#   && tar -xzvf pcre-8.39.tar.gz \
+#   && curl -Ls https://www.openssl.org/source/openssl-1.1.0c.tar.gz -o openssl-1.1.0c.tar.gz \
+#   && tar -xzvf openssl-1.1.0c.tar.gz \
   && curl -Ls http://nginx.org/download/nginx-1.11.8.tar.gz -o nginx-1.11.8.tar.gz \
   && tar -xzvf nginx-1.11.8.tar.gz
-
-RUN cd /usr/src/nginx-1.11.8 \
+  && cd /usr/src/nginx-1.11.8 \
     && rpm --rebuilddb && yum install -y openssl-devel pcre-devel libxml2-devel libxslt-devel geoip-devel \
     && ./configure \
         --prefix=${OPT_PATH} \
