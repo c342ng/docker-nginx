@@ -5,7 +5,7 @@ ENV CONF_PATH /opt/nginx/conf
 ENV DATA_PATH /data/nginx
 ENV LOG_PATH /data/logs/nginx
 
-ENV PID_PATH /opt/nginx/run/
+ENV PID_PATH /data/run/
 
 ENV USER nginx
 ENV GROUP nginx
