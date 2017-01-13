@@ -13,20 +13,36 @@ ENV GROUP nginx
 RUN groupadd -r ${GROUP} && useradd -r -g ${GROUP} ${USER}
 RUN mkdir -p ${OPT_PATH} ${CONF_PATH} ${DATA_PATH} ${LOG_PATH} \
   && chown "${GROUP}:${USER}" ${OPT_PATH} ${CONF_PATH} ${DATA_PATH} ${LOG_PATH}
+  
+ENV NGINX_VERSION 1.11.8
+ENV ZLIB_VERSION 1.2.10
+ENV PCRE_VERSION 8.39
+ENV OPENSSL_VERSION 1.1.0c
+ENV LIBXML2_VERSION 2.9.4
+ENV LIBXSLT_VERSION 1.1.29
 
 RUN rpm --rebuilddb && yum swap -y fakesystemd systemd && yum update -y && yum install -y systemd-devel \
-  && yum install -y ca-certificates curl tar perl gcc gcc-c++ make \
-  && cd /usr/src \
-#   && curl -Ls http://www.zlib.net/zlib-1.2.10.tar.gz -o zlib-1.2.10.tar.gz \
-#   && tar -xzvf zlib-1.2.10.tar.gz \
-#   && curl -Ls ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.39.tar.gz -o pcre-8.39.tar.gz \
-#   && tar -xzvf pcre-8.39.tar.gz \
-#   && curl -Ls https://www.openssl.org/source/openssl-1.1.0c.tar.gz -o openssl-1.1.0c.tar.gz \
-#   && tar -xzvf openssl-1.1.0c.tar.gz \
-  && curl -Ls http://nginx.org/download/nginx-1.11.8.tar.gz -o nginx-1.11.8.tar.gz \
-  && tar -xzvf nginx-1.11.8.tar.gz \
-  && cd /usr/src/nginx-1.11.8 \
-    && rpm --rebuilddb && yum install -y openssl-devel pcre-devel libxml2-devel libxslt-devel geoip-devel \
+    && yum install -y ca-certificates curl tar perl gcc gcc-c++ make \
+    && cd /usr/src \
+    && curl -Ls http://www.zlib.net/zlib-${ZLIB_VERSION}.tar.gz -o zlib-${ZLIB_VERSION}.tar.gz \
+    && tar -xzvf zlib-${ZLIB_VERSION}.tar.gz \
+    && curl -Ls ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${PCRE_VERSION}.tar.gz -o pcre-${PCRE_VERSION}.tar.gz \
+    && tar -xzvf pcre-${PCRE_VERSION}.tar.gz \
+    && curl -Ls https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz -o openssl-${OPENSSL_VERSION}.tar.gz \
+    && tar -xzvf openssl-${OPENSSL_VERSION}.tar.gz \
+    && curl -Ls http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz -o nginx-${NGINX_VERSION}.tar.gz \
+    && tar -xzvf nginx-${NGINX_VERSION}.tar.gz
+ 
+RUN curl -Ls ftp://xmlsoft.org/libxml2/libxml2-${LIBXML2_VERSION}.tar.gz -o libxml2-${LIBXML2_VERSION}.tar.gz \
+    && tar -xzvf libxml2-${LIBXML2_VERSION}.tar.gz \
+    && curl -Ls ftp://xmlsoft.org/libxslt/libxslt-${LIBXSLT_VERSION}.tar.gz -o libxslt-${LIBXSLT_VERSION}.tar.gz \
+    && tar -xzvf libxslt-${LIBXSLT_VERSION}.tar.gz
+    
+RUN cd /usr/src/nginx-${NGINX_VERSION} \
+    && ./configure --help
+    
+#    && rpm --rebuilddb && yum install -y openssl-devel pcre-devel libxml2-devel libxslt-devel geoip-devel \
+RUN cd /usr/src/nginx-${NGINX_VERSION} \
     && ./configure \
         --prefix=${OPT_PATH} \
         --sbin-path=${OPT_PATH}/sbin/nginx \
@@ -69,12 +85,14 @@ RUN rpm --rebuilddb && yum swap -y fakesystemd systemd && yum update -y && yum i
         --with-stream_ssl_preread_module \
         --with-cc-opt='-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' \
         --with-ld-opt='-Wl,-z,relro -Wl,-z,now -Wl,--as-needed' \
-        --with-http_geoip_module \
+#        --with-http_geoip_module \
         --with-http_xslt_module \
         --with-pcre-jit \
-#         --with-pcre=/usr/src/pcre-8.39 \
-#         --with-zlib=/usr/src/zlib-1.2.10 \
-#         --with-openssl=/usr/src/openssl-1.1.0c \
+        --with-pcre=/usr/src/pcre-${PCRE_VERSION} \
+        --with-zlib=/usr/src/zlib-${ZLIB_VERSION} \
+        --with-openssl=/usr/src/openssl-${OPENSSL_VERSION} \
+        --with-libxml=/usr/src/libxml2-${LIBXML2_VERSION} \
+        --with-libxslt=/usr/src/libxslt-${LIBXSLT_VERSION} \
    && make install && make clean \
    && rm -rf /usr/src/pcre* /user/src/openssl* /usr/src/zlib* \
    && yum remove -y perl gcc gcc-c++ make \
