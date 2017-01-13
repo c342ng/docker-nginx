@@ -18,8 +18,6 @@ ENV NGINX_VERSION 1.11.8
 ENV ZLIB_VERSION 1.2.10
 ENV PCRE_VERSION 8.39
 ENV OPENSSL_VERSION 1.1.0c
-ENV LIBXML2_VERSION 2.9.4
-ENV LIBXSLT_VERSION 1.1.29
 
 RUN rpm --rebuilddb && yum swap -y fakesystemd systemd && yum update -y && yum install -y systemd-devel \
     && yum install -y ca-certificates curl tar perl gcc gcc-c++ make \
@@ -33,15 +31,6 @@ RUN rpm --rebuilddb && yum swap -y fakesystemd systemd && yum update -y && yum i
     && curl -Ls http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz -o nginx-${NGINX_VERSION}.tar.gz \
     && tar -xzvf nginx-${NGINX_VERSION}.tar.gz
  
-RUN curl -Ls ftp://xmlsoft.org/libxml2/libxml2-${LIBXML2_VERSION}.tar.gz -o libxml2-${LIBXML2_VERSION}.tar.gz \
-    && tar -xzvf libxml2-${LIBXML2_VERSION}.tar.gz \
-    && curl -Ls ftp://xmlsoft.org/libxslt/libxslt-${LIBXSLT_VERSION}.tar.gz -o libxslt-${LIBXSLT_VERSION}.tar.gz \
-    && tar -xzvf libxslt-${LIBXSLT_VERSION}.tar.gz
-    
-# RUN cd /usr/src/nginx-${NGINX_VERSION} \
-#     && ./configure --help
-    
-#    && rpm --rebuilddb && yum install -y openssl-devel pcre-devel libxml2-devel libxslt-devel geoip-devel \
 RUN cd /usr/src/nginx-${NGINX_VERSION} \
     && ./configure \
         --prefix=${OPT_PATH} \
@@ -85,14 +74,10 @@ RUN cd /usr/src/nginx-${NGINX_VERSION} \
         --with-stream_ssl_preread_module \
         --with-cc-opt='-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' \
         --with-ld-opt='-Wl,-z,relro -Wl,-z,now -Wl,--as-needed' \
-#        --with-http_geoip_module \
-#        --with-http_xslt_module \
         --with-pcre-jit \
         --with-pcre=/usr/src/pcre-${PCRE_VERSION} \
         --with-zlib=/usr/src/zlib-${ZLIB_VERSION} \
         --with-openssl=/usr/src/openssl-${OPENSSL_VERSION} \
-#         --with-libxml=/usr/src/libxml2-${LIBXML2_VERSION} \
-#         --with-libxslt=/usr/src/libxslt-${LIBXSLT_VERSION} \
    && make install && make clean \
    && rm -rf /usr/src/pcre* /user/src/openssl* /usr/src/zlib* \
    && yum remove -y perl gcc gcc-c++ make \
@@ -103,7 +88,8 @@ ENV PATH $PATH:${OPT_PATH}/sbin/
 RUN ln -sf /etc/nginx/ ${CONF_PATH}
 
 # forward request and error logs to docker log collector
-RUN touch ${LOG_PATH}/access.log && touch ${LOG_PATH}/error.log \
+RUN touch ${LOG_PATH}/access.log \
+  && touch ${LOG_PATH}/error.log \
   && ln -sf /dev/stdout ${LOG_PATH}/access.log \
   && ln -sf /dev/stderr ${LOG_PATH}/error.log
 
