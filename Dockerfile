@@ -14,7 +14,7 @@ RUN groupadd -r ${GROUP} && useradd -r -g ${GROUP} ${USER}
 RUN mkdir -p ${OPT_PATH} ${CONF_PATH} ${DATA_PATH} ${LOG_PATH} \
   && chown "${GROUP}:${USER}" ${OPT_PATH} ${CONF_PATH} ${DATA_PATH} ${LOG_PATH}
 
-RUN rpm --rebuilddb && yum swap -y fakesystemd systemd && yum update && yum install -y systemd-devel \
+RUN rpm --rebuilddb && yum swap -y fakesystemd systemd && yum update -y && yum install -y systemd-devel \
   && yum install -y ca-certificates curl tar perl gcc gcc-c++ make \
   && cd /usr/src \
   && curl -Ls http://www.zlib.net/zlib-1.2.10.tar.gz -o zlib-1.2.10.tar.gz \
