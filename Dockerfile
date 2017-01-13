@@ -86,7 +86,7 @@ RUN cd /usr/src/nginx-${NGINX_VERSION} \
         --with-cc-opt='-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' \
         --with-ld-opt='-Wl,-z,relro -Wl,-z,now -Wl,--as-needed' \
 #        --with-http_geoip_module \
-        --with-http_xslt_module \
+#        --with-http_xslt_module \
         --with-pcre-jit \
         --with-pcre=/usr/src/pcre-${PCRE_VERSION} \
         --with-zlib=/usr/src/zlib-${ZLIB_VERSION} \
