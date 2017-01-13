@@ -5,14 +5,14 @@ ENV CONF_PATH /opt/nginx/conf
 ENV DATA_PATH /data/nginx
 ENV LOG_PATH /data/logs/nginx
 
-ENV PID_PATH /data/run/
+ENV PID_PATH /opt/nginx/run/
 
 ENV USER nginx
 ENV GROUP nginx
 
 RUN groupadd -r ${GROUP} && useradd -r -g ${GROUP} ${USER}
-RUN mkdir -p ${OPT_PATH} ${CONF_PATH} ${DATA_PATH} ${LOG_PATH} \
-  && chown "${GROUP}:${USER}" ${OPT_PATH} ${CONF_PATH} ${DATA_PATH} ${LOG_PATH}
+RUN mkdir -p ${OPT_PATH} ${CONF_PATH} ${DATA_PATH} ${LOG_PATH} ${PID_PATH}\
+  && chown "${GROUP}:${USER}" ${OPT_PATH} ${CONF_PATH} ${DATA_PATH} ${LOG_PATH} ${PID_PATH}
   
 ENV NGINX_VERSION 1.11.8
 ENV ZLIB_VERSION 1.2.10
@@ -29,9 +29,8 @@ RUN rpm --rebuilddb && yum swap -y fakesystemd systemd && yum update -y && yum i
     && curl -Ls https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz -o openssl-${OPENSSL_VERSION}.tar.gz \
     && tar -xzvf openssl-${OPENSSL_VERSION}.tar.gz \
     && curl -Ls http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz -o nginx-${NGINX_VERSION}.tar.gz \
-    && tar -xzvf nginx-${NGINX_VERSION}.tar.gz
- 
-RUN cd /usr/src/nginx-${NGINX_VERSION} \
+    && tar -xzvf nginx-${NGINX_VERSION}.tar.gz \
+    && cd /usr/src/nginx-${NGINX_VERSION} \
     && ./configure \
         --prefix=${OPT_PATH} \
         --sbin-path=${OPT_PATH}/sbin/nginx \
