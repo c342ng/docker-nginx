@@ -14,8 +14,8 @@ RUN groupadd -r ${GROUP} && useradd -r -g ${GROUP} ${USER}
 RUN mkdir -p ${OPT_PATH} ${CONF_PATH} ${DATA_PATH} ${LOG_PATH} \
   && chown "${GROUP}:${USER}" ${OPT_PATH} ${CONF_PATH} ${DATA_PATH} ${LOG_PATH}
 
-RUN yum update && yum swap -y fakesystemd systemd &&  yum install -y systemd-devel \
-  && yum install --skip-broken -y ca-certificates curl tar perl gcc gcc-c++ make \
+RUN rpm --rebuilddb && yum update && yum swap -y fakesystemd systemd && yum install -y systemd-devel \
+  && yum install -y ca-certificates curl tar perl gcc gcc-c++ make \
   && cd /usr/src \
   && curl -Ls http://www.zlib.net/zlib-1.2.10.tar.gz -o zlib-1.2.10.tar.gz \
   && tar -xzvf zlib-1.2.10.tar.gz \
@@ -27,7 +27,6 @@ RUN yum update && yum swap -y fakesystemd systemd &&  yum install -y systemd-dev
   && tar -xzvf nginx-1.11.8.tar.gz
 
 RUN cd /usr/src/nginx-1.11.8 \
-#     && rpm --rebuilddb \
     && yum install -y openssl-devel pcre-devel libxml2-devel \
     && ./configure \
         --prefix=${OPT_PATH} \
