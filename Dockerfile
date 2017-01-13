@@ -27,7 +27,7 @@ RUN rpm --rebuilddb && yum swap -y fakesystemd systemd && yum update -y && yum i
   && tar -xzvf nginx-1.11.8.tar.gz
 
 RUN cd /usr/src/nginx-1.11.8 \
-    && rpm --rebuilddb && yum install -y openssl-devel pcre-devel libxml2-devel \
+    && rpm --rebuilddb && yum install -y openssl-devel pcre-devel libxml2-devel libxslt-devel \
     && ./configure \
         --prefix=${OPT_PATH} \
         --sbin-path=${OPT_PATH}/sbin/nginx \
