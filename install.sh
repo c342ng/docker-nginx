@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 app_name=nginx
 
