@@ -1,0 +1,181 @@
+#!/bin/bash
+
+# nginx Startup script for the Nginx HTTP Server
+
+# this script create it by jackbillow at 2007.10.15.
+
+# it is v.0.0.2 version.
+
+# if you find any errors on this scripts,please contact jackbillow.
+
+# and send mail to jackbillow at gmail dot com.
+
+#
+
+# chkconfig: - 85 15
+
+# description: Nginx is a high-performance web and proxy server.
+
+#              It has a lot of features, but it's not for everyone.
+
+# processname: nginx
+
+
+# config: /opt/nginx/conf/nginx.conf
+ulimit -u unlimited
+ulimit -n 204800
+prefix=/opt
+path=$prefix/nginx/sbin/nginx
+config=$prefix/nginx/conf/nginx.conf
+pidfile=$prefix/nginx/logs/nginx.pid
+RETVAL=0
+prog="nginx"
+# Source function library.
+. /etc/rc.d/init.d/functions
+# Source networking configuration.
+. /etc/sysconfig/network
+# Check that networking is up.
+[ "${NETWORKING}" = "no" ] && exit 0
+[ -x $path ] || exit 0
+# Start nginx daemons functions.
+
+start() {
+   local pid
+   if [ -s $pidfile ];then
+        pid=`cat $pidfile`
+        kill -0 $pid
+        RETVAL=$?
+        if [ "$RETVAL" -eq "0" ]; then
+            echo $"nginx already running...."
+            return $RETVAL
+        fi
+    fi
+   echo -n $"Starting $prog: "
+   daemon $path -c $config
+   RETVAL=$?
+   echo
+   [ "$RETVAL" -eq  "0" ] && touch /var/lock/subsys/nginx
+   return $RETVAL
+}
+
+
+
+# Stop nginx daemons functions.
+
+stop() {
+        maxwait=30
+        echo -n $"Stopping $prog: "
+        if [ ! -s $pidfile ]; then
+                echo -n $"$prog is already stoped"
+                success
+                echo
+                return $RETVAL
+        fi
+        pid=`cat $pidfile`
+        if ! checkpid $pid 2>&1; then
+                echo -n $"$prog is not running"
+                failure
+                echo
+                return 1
+        fi
+        for ((i=0;;i++));
+        do
+                if [ "$i" -eq 0 ] && checkpid $pid 2>&1; then
+                        kill -TERM $pid
+                        usleep 100000
+                fi
+                if checkpid $pid 2>&1; then
+                        echo  -n .
+                else 
+                        break
+                fi
+                if [ "$i" -ge "$maxwait" ] && checkpid $pid 2>&1; then
+                        $path -k kill
+                        usleep 100000
+                        break
+                fi
+                sleep 1
+        done
+        checkpid $pid
+        RETVAL=$?
+        [ "$RETVAL" -ne 0 ] && success && rm -f /var/lock/subsys/nginx || failure
+        echo
+        return $RETVAL
+}
+
+   
+
+# reload nginx service functions.
+
+reload() {
+    echo -n $"Reloading $prog: "
+    $path -s reload
+    RETVAL=$?
+    [ "$RETVAL" -eq "0" ] && success || failure
+    echo
+    return $RETVAL
+}
+
+
+# rotate nginx log functions.
+
+rotate() {
+        echo -n $"Rotate log $prog: "
+        kill -USR1 `cat $pidfile`
+        RETVAL=$?
+        [ "$RETVAL" -eq "0" ] && success || failure
+        echo
+        return $RETVAL
+}
+
+conftest() {
+    echo -n $"Test $prog conf: "
+    $path -c $config -t
+    RETVAL=$?
+    [ "$RETVAL" -eq '0' ] && success || failure;
+    echo
+    return $RETVAL
+}
+
+
+# See how we were called.
+
+case "$1" in
+
+start)
+        conftest 2>/dev/null && start
+        ;;
+stop)
+        stop
+        ;;
+reload)
+        conftest 2>/dev/null  && reload
+        ;;
+restart)
+       conftest 2>/dev/null
+       RETVAL=$?
+       if [ "$RETVAL" -eq '0' ]; then
+                $0 stop
+                $0 start
+        fi
+        ;; 
+condrestart)
+       [ -e /var/lock/subsys/nginx ] && $0 restart
+       ;;
+conftest)
+        conftest
+        ;;
+rotate)
+        rotate
+        ;;
+    
+status)
+        status $path
+        RETVAL=$?
+        ;;
+
+*)
+        echo $"Usage: $prog {start|stop|restart|condrestart|reload|rotate|conftest|status}"
+        exit 1
+esac
+exit $RETVAL
