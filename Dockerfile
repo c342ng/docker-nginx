@@ -85,6 +85,8 @@ RUN rpm --rebuilddb && yum swap -y fakesystemd systemd && yum update -y && yum i
 ENV PATH $PATH:${OPT_PATH}/sbin/
 
 COPY conf ${OPT_PATH}
+COPY install.sh ${OPT_PATH}
+COPY nginx ${OPT_PATH}
 
 # forward request and error logs to docker log collector
 RUN touch ${LOG_PATH}/access.log \
