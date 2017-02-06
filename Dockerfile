@@ -12,7 +12,7 @@ ENV GROUP nginx
 
 RUN groupadd -r ${GROUP} && useradd -r -g ${GROUP} ${USER}
 RUN mkdir -p ${OPT_PATH} ${CONF_PATH} ${DATA_PATH} ${LOG_PATH} ${PID_PATH}\
-  && chown "${GROUP}:${USER}" ${OPT_PATH} ${CONF_PATH} ${DATA_PATH} ${LOG_PATH} ${PID_PATH}
+  && chown "${USER}:${GROUP}" ${OPT_PATH} ${CONF_PATH} ${DATA_PATH} ${LOG_PATH} ${PID_PATH}
   
 ENV NGINX_VERSION 1.11.8
 ENV ZLIB_VERSION 1.2.11
